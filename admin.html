@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TUNZYFFVCF — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #020b18;
+    --dark-blue: #040f20;
+    --accent: #0a4a8a;
+    --glow: #1a7fd4;
+    --bright: #2fa3f7;
+    --text: #c8e0f5;
+    --muted: #4a7aaa;
+    --red: #e03e3e;
+    --green: #2fc97d;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--navy);
+    font-family: 'Rajdhani', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(26,127,212,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,127,212,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* LOGIN SCREEN */
+  #loginScreen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    background: var(--navy);
+  }
+
+  .login-card {
+    width: 340px;
+    background: linear-gradient(145deg, rgba(7,24,48,0.98), rgba(4,15,32,0.99));
+    border: 1px solid rgba(26,127,212,0.25);
+    border-radius: 20px;
+    padding: 40px 32px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    text-align: center;
+  }
+
+  .login-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+  }
+
+  .login-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--bright);
+    margin-bottom: 6px;
+  }
+
+  .login-sub {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    text-transform: uppercase;
+  }
+
+  .login-input-wrap {
+    position: relative;
+    margin-bottom: 18px;
+  }
+
+  .login-input-wrap .icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--glow);
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  #pwInput {
+    width: 100%;
+    background: rgba(2,11,24,0.8);
+    border: 1px solid rgba(26,127,212,0.25);
+    border-radius: 10px;
+    padding: 13px 14px 13px 42px;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    text-align: center;
+  }
+
+  #pwInput:focus {
+    border-color: var(--glow);
+    box-shadow: 0 0 0 3px rgba(26,127,212,0.12);
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(135deg, var(--accent), var(--glow));
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(26,127,212,0.3);
+  }
+
+  .login-btn:hover {
+    background: linear-gradient(135deg, var(--glow), var(--bright));
+    transform: translateY(-2px);
+  }
+
+  .login-err {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--red);
+    letter-spacing: 1px;
+    min-height: 18px;
+  }
+
+  /* ADMIN DASHBOARD */
+  #adminDash {
+    display: none;
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+  }
+
+  .dash-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .dash-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    color: var(--bright);
+    text-shadow: 0 0 15px rgba(47,163,247,0.4);
+  }
+
+  .dash-badge {
+    background: rgba(10,74,138,0.3);
+    border: 1px solid rgba(26,127,212,0.3);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .logout-btn {
+    background: rgba(224,62,62,0.1);
+    border: 1px solid rgba(224,62,62,0.3);
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: var(--red);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+  }
+
+  .logout-btn:hover {
+    background: rgba(224,62,62,0.2);
+    border-color: var(--red);
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: linear-gradient(145deg, rgba(7,24,48,0.9), rgba(4,15,32,0.95));
+    border: 1px solid rgba(26,127,212,0.2);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--bright);
+    text-shadow: 0 0 15px rgba(47,163,247,0.4);
+  }
+
+  .stat-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* Progress */
+  .progress-section {
+    background: linear-gradient(145deg, rgba(7,24,48,0.9), rgba(4,15,32,0.95));
+    border: 1px solid rgba(26,127,212,0.2);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .progress-title {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .progress-pct {
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    color: var(--bright);
+  }
+
+  .big-progress {
+    background: rgba(2,11,24,0.6);
+    border-radius: 8px;
+    height: 10px;
+    overflow: hidden;
+  }
+
+  .big-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--bright));
+    border-radius: 8px;
+    transition: width 0.8s ease;
+    box-shadow: 0 0 10px rgba(47,163,247,0.5);
+  }
+
+  /* Action buttons */
+  .action-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    padding: 10px 20px;
+    border-radius: 9px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+  }
+
+  .btn-export {
+    background: rgba(47,201,125,0.1);
+    border: 1px solid rgba(47,201,125,0.3);
+    color: var(--green);
+  }
+  .btn-export:hover { background: rgba(47,201,125,0.2); }
+
+  .btn-clear {
+    background: rgba(224,62,62,0.1);
+    border: 1px solid rgba(224,62,62,0.3);
+    color: var(--red);
+  }
+  .btn-clear:hover { background: rgba(224,62,62,0.2); }
+
+  /* Table */
+  .table-card {
+    background: linear-gradient(145deg, rgba(7,24,48,0.9), rgba(4,15,32,0.95));
+    border: 1px solid rgba(26,127,212,0.2);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .table-head {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(26,127,212,0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .table-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .table-count {
+    font-size: 11px;
+    color: var(--bright);
+    letter-spacing: 2px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    padding: 12px 20px;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    background: rgba(2,11,24,0.3);
+    font-weight: 600;
+  }
+
+  tbody tr {
+    border-top: 1px solid rgba(26,127,212,0.08);
+    transition: background 0.2s;
+  }
+
+  tbody tr:hover { background: rgba(26,127,212,0.05); }
+
+  tbody td {
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .td-num { font-family: 'Orbitron', monospace; font-size: 11px; color: var(--muted); }
+  .td-name { color: var(--text); }
+  .td-phone { color: var(--bright); }
+  .td-time { font-size: 11px; color: var(--muted); letter-spacing: 1px; }
+
+  .empty-state {
+    padding: 40px;
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* Alert banner */
+  .alert-banner {
+    background: linear-gradient(135deg, rgba(47,201,125,0.15), rgba(10,74,138,0.1));
+    border: 1px solid rgba(47,201,125,0.3);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    font-size: 13px;
+    color: var(--green);
+    letter-spacing: 1px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+  .alert-banner.show { display: flex; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-icon">🔐</div>
+    <div class="login-title">ADMIN ACCESS</div>
+    <div class="login-sub">TUNZYFFVCF Files</div>
+    <div class="login-input-wrap">
+      <span class="icon">🔑</span>
+      <input type="password" id="pwInput" placeholder="PASSWORD" onkeydown="if(event.key==='Enter') doLogin()"/>
+    </div>
+    <button class="login-btn" onclick="doLogin()">ENTER</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="adminDash">
+
+  <div class="dash-header">
+    <div class="dash-logo">TUNZYFFVCF ADMIN</div>
+    <div class="dash-badge">🛡️ Secure Panel</div>
+    <button class="logout-btn" onclick="doLogout()">Logout</button>
+  </div>
+
+  <!-- 500 reached alert -->
+  <div class="alert-banner" id="alertBanner">
+    🎉 &nbsp; 500 submissions reached! VCF file should now be distributed.
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num" id="statTotal">0</div>
+      <div class="stat-label">Total Submissions</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statRemain">500</div>
+      <div class="stat-label">Remaining</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="statPct">0%</div>
+      <div class="stat-label">Progress</div>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-section">
+    <div class="progress-header">
+      <div class="progress-title">Target: 500 Registrations</div>
+      <div class="progress-pct" id="bigPct">0 / 500</div>
+    </div>
+    <div class="big-progress">
+      <div class="big-progress-fill" id="bigBar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="action-row">
+    <button class="action-btn btn-export" onclick="exportCSV()">⬇ Export CSV</button>
+    <button class="action-btn btn-clear" onclick="clearData()">🗑 Clear All Data</button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-card">
+    <div class="table-head">
+      <div class="table-title">Registered Users</div>
+      <div class="table-count" id="tableCount">0 entries</div>
+    </div>
+    <div id="tableWrap">
+      <div class="empty-state">No submissions yet</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const PASSWORD = 'TUNZYVCF';
+
+  function doLogin() {
+    const val = document.getElementById('pwInput').value;
+    if (val === PASSWORD) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminDash').style.display = 'block';
+      loadDash();
+    } else {
+      const err = document.getElementById('loginErr');
+      err.textContent = '⚠️ Incorrect password';
+      document.getElementById('pwInput').value = '';
+      setTimeout(() => err.textContent = '', 2500);
+    }
+  }
+
+  function doLogout() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('adminDash').style.display = 'none';
+    document.getElementById('pwInput').value = '';
+  }
+
+  function loadDash() {
+    const submissions = JSON.parse(localStorage.getItem('tunzy_submissions') || '[]');
+    const count = submissions.length;
+    const pct = Math.min(Math.round((count / 500) * 100), 100);
+    const remain = Math.max(500 - count, 0);
+
+    document.getElementById('statTotal').textContent = count;
+    document.getElementById('statRemain').textContent = remain;
+    document.getElementById('statPct').textContent = pct + '%';
+    document.getElementById('bigPct').textContent = count + ' / 500';
+    document.getElementById('bigBar').style.width = pct + '%';
+    document.getElementById('tableCount').textContent = count + ' entries';
+
+    if (count >= 500) {
+      document.getElementById('alertBanner').classList.add('show');
+    }
+
+    if (submissions.length === 0) {
+      document.getElementById('tableWrap').innerHTML = '<div class="empty-state">No submissions yet</div>';
+      return;
+    }
+
+    let rows = submissions.map((s, i) => `
+      <tr>
+        <td class="td-num">${i + 1}</td>
+        <td class="td-name">${s.name}</td>
+        <td class="td-phone">${s.phone}</td>
+        <td class="td-time">${new Date(s.time).toLocaleString()}</td>
+      </tr>
+    `).join('');
+
+    document.getElementById('tableWrap').innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+  }
+
+  function exportCSV() {
+    const submissions = JSON.parse(localStorage.getItem('tunzy_submissions') || '[]');
+    if (!submissions.length) { alert('No data to export'); return; }
+    let csv = 'No,Name,Phone,Time\n';
+    submissions.forEach((s, i) => {
+      csv += `${i+1},"${s.name}","${s.phone}","${new Date(s.time).toLocaleString()}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'tunzy_submissions.csv'; a.click();
+  }
+
+  function clearData() {
+    if (confirm('Clear ALL submission data? This cannot be undone.')) {
+      localStorage.removeItem('tunzy_submissions');
+      localStorage.removeItem('tunzy_count');
+      loadDash();
+    }
+  }
+</script>
+</body>
+</html>
