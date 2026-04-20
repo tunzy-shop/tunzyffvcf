@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TUNZYFFVCF FILES</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --navy: #020b18;
+    --dark-blue: #040f20;
+    --mid-blue: #071830;
+    --accent: #0a4a8a;
+    --glow: #1a7fd4;
+    --bright: #2fa3f7;
+    --text: #c8e0f5;
+    --muted: #4a7aaa;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--navy);
+    font-family: 'Rajdhani', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(26,127,212,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,127,212,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Radial glow */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    height: 60vh;
+    background: radial-gradient(ellipse, rgba(10,74,138,0.3) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+  }
+
+  /* Logo / Header */
+  .logo-section {
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .logo-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, var(--accent), var(--glow));
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px rgba(26,127,212,0.4), 0 0 60px rgba(26,127,212,0.15);
+    animation: pulse 3s ease-in-out infinite;
+    font-size: 30px;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(26,127,212,0.4), 0 0 60px rgba(26,127,212,0.15); }
+    50% { box-shadow: 0 0 40px rgba(47,163,247,0.6), 0 0 80px rgba(26,127,212,0.25); }
+  }
+
+  .logo-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: var(--bright);
+    text-shadow: 0 0 20px rgba(47,163,247,0.5);
+    text-transform: uppercase;
+  }
+
+  .logo-sub {
+    font-size: 12px;
+    letter-spacing: 6px;
+    color: var(--muted);
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+
+  /* Card */
+  .card {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(7,24,48,0.95), rgba(4,15,32,0.98));
+    border: 1px solid rgba(26,127,212,0.2);
+    border-radius: 20px;
+    padding: 32px 28px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(47,163,247,0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .card-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-title::before, .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(26,127,212,0.3));
+  }
+  .card-title::after {
+    background: linear-gradient(270deg, transparent, rgba(26,127,212,0.3));
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .field-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+
+  .input-wrap .icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--glow);
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  input[type="text"],
+  input[type="tel"] {
+    width: 100%;
+    background: rgba(2,11,24,0.8);
+    border: 1px solid rgba(26,127,212,0.25);
+    border-radius: 10px;
+    padding: 13px 14px 13px 42px;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+  }
+
+  input:focus {
+    border-color: var(--glow);
+    background: rgba(4,15,32,0.95);
+    box-shadow: 0 0 0 3px rgba(26,127,212,0.12), 0 0 20px rgba(26,127,212,0.08);
+  }
+
+  input::placeholder { color: rgba(74,122,170,0.5); }
+
+  .hint {
+    font-size: 11px;
+    color: rgba(74,122,170,0.6);
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+
+  /* Counter */
+  .counter-card {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(10,74,138,0.15), rgba(26,127,212,0.08));
+    border: 1px solid rgba(26,127,212,0.2);
+    border-radius: 14px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .counter-visual {
+    position: relative;
+    width: 62px;
+    height: 62px;
+    flex-shrink: 0;
+  }
+
+  .counter-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .counter-track {
+    fill: none;
+    stroke: rgba(26,127,212,0.15);
+    stroke-width: 4;
+  }
+
+  .counter-fill {
+    fill: none;
+    stroke: var(--bright);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 163;
+    stroke-dashoffset: 163;
+    transition: stroke-dashoffset 1s ease;
+    filter: drop-shadow(0 0 4px rgba(47,163,247,0.6));
+  }
+
+  .counter-num {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--bright);
+  }
+
+  .counter-info { flex: 1; }
+
+  .counter-label {
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .progress-bar-wrap {
+    background: rgba(2,11,24,0.6);
+    border-radius: 6px;
+    height: 6px;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--bright));
+    border-radius: 6px;
+    width: 0%;
+    transition: width 1s ease;
+    box-shadow: 0 0 8px rgba(47,163,247,0.5);
+  }
+
+  .counter-sub {
+    font-size: 11px;
+    color: rgba(74,122,170,0.6);
+    letter-spacing: 1px;
+  }
+
+  .counter-sub span {
+    color: var(--bright);
+    font-weight: 700;
+  }
+
+  /* Submit button */
+  .btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--accent), var(--glow));
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-family: 'Orbitron', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(26,127,212,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-submit::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 50%;
+    height: 200%;
+    background: rgba(255,255,255,0.1);
+    transform: skewX(-20deg);
+    transition: left 0.5s;
+  }
+
+  .btn-submit:hover::before { left: 120%; }
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(26,127,212,0.5);
+    background: linear-gradient(135deg, var(--glow), var(--bright));
+  }
+
+  .btn-submit:active { transform: translateY(0); }
+
+  .btn-submit.loading {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+
+  /* Channel button */
+  .btn-channel {
+    width: 100%;
+    padding: 15px;
+    background: transparent;
+    border: 1px solid rgba(47,163,247,0.4);
+    border-radius: 12px;
+    color: var(--bright);
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .btn-channel:hover {
+    background: rgba(47,163,247,0.08);
+    border-color: var(--bright);
+    box-shadow: 0 0 20px rgba(47,163,247,0.2);
+    transform: translateY(-2px);
+    color: #fff;
+  }
+
+  .btn-channel svg { width: 18px; height: 18px; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: linear-gradient(135deg, rgba(10,74,138,0.95), rgba(7,24,48,0.98));
+    border: 1px solid rgba(47,163,247,0.4);
+    border-radius: 12px;
+    padding: 14px 24px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: var(--bright);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 100;
+    white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Footer */
+  .footer {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(74,122,170,0.35);
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  /* Particles */
+  .particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--glow);
+    border-radius: 50%;
+    opacity: 0;
+    animation: float-up linear infinite;
+  }
+
+  @keyframes float-up {
+    0% { opacity: 0; transform: translateY(100vh) scale(0); }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.2; }
+    100% { opacity: 0; transform: translateY(-10vh) scale(1.5); }
+  }
+
+  /* Scanning line */
+  .scan-line {
+    position: fixed;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(47,163,247,0.15), transparent);
+    animation: scan 6s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes scan {
+    0% { top: -2px; }
+    100% { top: 100vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+<div class="scan-line"></div>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="logo-section">
+    <div class="logo-icon">📁</div>
+    <div class="logo-title">TUNZYFFVCF</div>
+    <div class="logo-sub">VCF Files Distribution</div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="card">
+    <div class="card-title">Registration</div>
+    <div class="field-group">
+
+      <div>
+        <div class="field-label">Full Name</div>
+        <div class="input-wrap">
+          <span class="icon">👤</span>
+          <input type="text" id="nameInput" placeholder="Enter your name..." autocomplete="off"/>
+        </div>
+      </div>
+
+      <div>
+        <div class="field-label">Phone Number</div>
+        <div class="input-wrap">
+          <span class="icon">📞</span>
+          <input type="tel" id="phoneInput" placeholder="+1 234 567 8900" autocomplete="off"/>
+        </div>
+        <div class="hint">Include country code  e.g. +234, +1, +44</div>
+      </div>
+
+    </div>
+
+    <br/>
+    <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">
+      ⚡ &nbsp; SUBMIT
+    </button>
+  </div>
+
+  <!-- Counter Card -->
+  <div class="counter-card">
+    <div class="counter-visual">
+      <svg class="counter-svg" viewBox="0 0 62 62">
+        <circle class="counter-track" cx="31" cy="31" r="26"/>
+        <circle class="counter-fill" id="counterArc" cx="31" cy="31" r="26"/>
+      </svg>
+      <div class="counter-num" id="counterNum">0</div>
+    </div>
+    <div class="counter-info">
+      <div class="counter-label">Submissions</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+      <div class="counter-sub"><span id="countDisplay">0</span> / 500 registered — VCF sends at 500</div>
+    </div>
+  </div>
+
+  <!-- Channel Button -->
+  <a href="https://whatsapp.com/channel/0029VbCLX4nL7UVb5ISACo0U" target="_blank" class="btn-channel">
+    <svg viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    Channel Link
+  </a>
+
+  <div class="footer">tunzyffvcf files &nbsp;·&nbsp; vcf distribution</div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // Generate floating particles
+  const particleContainer = document.getElementById('particles');
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (8 + Math.random() * 14) + 's';
+    p.style.animationDelay = (Math.random() * 12) + 's';
+    p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+    p.style.opacity = Math.random() * 0.5;
+    particleContainer.appendChild(p);
+  }
+
+  // Load count from localStorage
+  let count = parseInt(localStorage.getItem('tunzy_count') || '0');
+  updateCounter(count);
+
+  function updateCounter(n) {
+    const pct = Math.min(n / 500, 1);
+    const circumference = 163;
+    document.getElementById('counterArc').style.strokeDashoffset = circumference - (circumference * pct);
+    document.getElementById('progressBar').style.width = (pct * 100) + '%';
+    document.getElementById('counterNum').textContent = n;
+    document.getElementById('countDisplay').textContent = n;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function handleSubmit() {
+    const name = document.getElementById('nameInput').value.trim();
+    const phone = document.getElementById('phoneInput').value.trim();
+
+    if (!name) { showToast('⚠️ Please enter your name'); return; }
+    if (!phone) { showToast('⚠️ Please enter your phone number'); return; }
+    if (!phone.startsWith('+')) { showToast('⚠️ Include country code e.g. +234...'); return; }
+
+    const btn = document.getElementById('submitBtn');
+    btn.classList.add('loading');
+    btn.textContent = '⏳  Processing...';
+
+    // Save submission
+    const submissions = JSON.parse(localStorage.getItem('tunzy_submissions') || '[]');
+    submissions.push({ name, phone, time: new Date().toISOString() });
+    localStorage.setItem('tunzy_submissions', JSON.stringify(submissions));
+
+    count++;
+    localStorage.setItem('tunzy_count', count);
+
+    setTimeout(() => {
+      updateCounter(count);
+      btn.classList.remove('loading');
+      btn.textContent = '✅  Submitted!';
+      document.getElementById('nameInput').value = '';
+      document.getElementById('phoneInput').value = '';
+      showToast('✅ Registered! ' + (500 - count) + ' spots remaining');
+
+      setTimeout(() => {
+        btn.textContent = '⚡  SUBMIT';
+      }, 2500);
+
+      if (count >= 500) {
+        showToast('🎉 500 reached! VCF file being sent...');
+      }
+    }, 1400);
+  }
+</script>
+
+</body>
+</html>
